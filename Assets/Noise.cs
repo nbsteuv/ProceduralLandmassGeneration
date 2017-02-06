@@ -32,6 +32,8 @@ public static class Noise {
                     amplitude *= persistance;
                     frequency *= lacunarity;
                 }
+
+                noiseMap[x, y] = noiseHeight;
             }
         }
 

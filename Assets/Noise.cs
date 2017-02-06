@@ -13,6 +13,9 @@ public static class Noise {
             scale = 0.0001f;
         }
 
+        float maxNoiseHeight = float.MinValue;
+        float minNoiseHeight = float.MaxValue;
+
         for(int y = 0; y < mapHeight; y++)
         {
             for(int x = 0; x < mapWidth; x++)
@@ -33,7 +36,25 @@ public static class Noise {
                     frequency *= lacunarity;
                 }
 
+                if(noiseHeight > maxNoiseHeight)
+                {
+                    maxNoiseHeight = noiseHeight;
+                }
+
+                if(noiseHeight < minNoiseHeight)
+                {
+                    minNoiseHeight = noiseHeight;
+                }
+
                 noiseMap[x, y] = noiseHeight;
+            }
+        }
+
+        for (int y = 0; y < mapHeight; y++)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
             }
         }
 

@@ -43,7 +43,7 @@ public class MapGenerator : MonoBehaviour {
                 float currentHeight = noiseMap[x, y];
                 for(int i = 0; i < regions.Length; i++)
                 {
-                    if(currentHeight < regions[i].height)
+                    if(currentHeight <= regions[i].height)
                     {
                         colorMap[y * mapWidth + x] = regions[i].color;
                         break;
@@ -53,7 +53,13 @@ public class MapGenerator : MonoBehaviour {
         }
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
-        display.DrawNoiseMap(noiseMap);
+        if(drawMode == DrawMode.NoiseMap)
+        {
+            display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+        } else if(drawMode == DrawMode.ColorMap)
+        {
+            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+        }
         
     }
 

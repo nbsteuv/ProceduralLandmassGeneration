@@ -6,31 +6,13 @@ public class MapDisplay : MonoBehaviour {
 
     public Renderer textureRenderer;
 
-    public void DrawNoiseMap(float[,] noiseMap)
+    public void DrawTexture(Texture2D texture)
     {
-        int width = noiseMap.GetLength(0);
-        int height = noiseMap.GetLength(1);
+        //Using sharedMaterial instead of material allows us to view this within game editor
+        textureRenderer.sharedMaterial.mainTexture = texture;
 
-        Texture2D texture = new Texture2D(width, height);
-
-        //Can use SetPixel(), but faster to generate an array and use SetPixels()
-        Color[] colorMap = new Color[width * height];
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                //Multiply y by width of the map to get row and add x to get position within row, converted to single dimension array position
-                colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, noiseMap[x, y]);
-            }
-            texture.SetPixels(colorMap);
-            texture.Apply();
-
-            //Using sharedMaterial instead of material allows us to view this within game editor
-            textureRenderer.sharedMaterial.mainTexture = texture;
-
-            //Scale plane to fit noisemap size
-            textureRenderer.transform.localScale = new Vector3(width, 1, height);
-        }
+        //Scale plane to fit noisemap size
+        textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height);
     }
 	
 }

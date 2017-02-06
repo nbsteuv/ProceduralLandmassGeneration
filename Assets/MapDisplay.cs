@@ -24,6 +24,12 @@ public class MapDisplay : MonoBehaviour {
             }
             texture.SetPixels(colorMap);
             texture.Apply();
+
+            //Using sharedMaterial instead of material allows us to view this within game editor
+            textureRenderer.sharedMaterial.mainTexture = texture;
+
+            //Scale plane to fit noisemap size
+            textureRenderer.transform.localScale = new Vector3(width, 1, height);
         }
     }
 	

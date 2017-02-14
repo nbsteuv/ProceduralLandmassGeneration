@@ -16,6 +16,7 @@ public class MapGenerator : MonoBehaviour {
     public int mapWidth;
     public int mapHeight;
     public float noiseScale;
+    public float meshHeightMultiplier;
 
     public int octaves;
 
@@ -62,7 +63,7 @@ public class MapGenerator : MonoBehaviour {
             display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
         } else if(drawMode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier), TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
         }
         
     }

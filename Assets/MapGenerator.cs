@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour {
 
-    const int mapChunkSize = 241;
+    public const int mapChunkSize = 241;
 
     //Clamp level of detail between 0 and 6
     [Range(0,6)]

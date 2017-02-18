@@ -94,7 +94,7 @@ public class EndlessTerrain : MonoBehaviour {
 
         void OnMapDataReceived(MapData mapData)
         {
-           mapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
+           //mapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
         }
 
         void OnMeshDataReceived(MeshData meshData)

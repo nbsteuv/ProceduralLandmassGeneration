@@ -150,7 +150,8 @@ public class MapGenerator : MonoBehaviour {
             {
                 if (useFalloff)
                 {
-                    noiseMap[x, y] = noiseMap[x, y] - falloffMap[x, y];
+                    float pointHeight = noiseMap[x, y] - falloffMap[x, y];
+                    noiseMap[x, y] = pointHeight >= 0 ? pointHeight : 0;
                 }
                 float currentHeight = noiseMap[x, y];
                 for(int i = 0; i < regions.Length; i++)

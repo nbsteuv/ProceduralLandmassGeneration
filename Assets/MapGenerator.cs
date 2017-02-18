@@ -22,6 +22,7 @@ public class MapGenerator : MonoBehaviour {
     public DrawMode drawMode;
 
     public Noise.NormalizeMode normalizeMode;
+    public float normalizationAdjustment;
 
     public float noiseScale;
     public float meshHeightMultiplier;
@@ -126,7 +127,7 @@ public class MapGenerator : MonoBehaviour {
 
     MapData GenerateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistance, lacunarity, center + offset, normalizeMode);
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistance, lacunarity, center + offset, normalizeMode, normalizationAdjustment);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
 

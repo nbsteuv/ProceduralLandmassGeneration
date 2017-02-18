@@ -11,7 +11,7 @@ public static class Noise
         Global
     };
 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, float normalizationAdjustment)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
@@ -87,7 +87,7 @@ public static class Noise
                 }
                 else
                 {
-                    float normalizedHeight = (noiseMap[x, y] + 1) / (2f * maxPossibleHeight);
+                    float normalizedHeight = (noiseMap[x, y] + 1) / (2f * maxPossibleHeight / normalizationAdjustment);
                     noiseMap[x, y] = normalizedHeight;
                 }
                 

@@ -39,12 +39,20 @@ public class MapGenerator : MonoBehaviour {
     public int seed;
     public Vector2 offset;
 
+    public bool useFalloff;
     public bool autoUpdate;
 
     public TerrainType[] regions;
 
+    float[,] falloffMap;
+
     Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
+
+    void Awake()
+    {
+        falloffMap = FallOffGenerator.GenerateFalloffMap(mapChunkSize);
+    }
 
     void Update()
     {
@@ -140,6 +148,10 @@ public class MapGenerator : MonoBehaviour {
         {
             for(int x = 0; x < mapChunkSize; x++)
             {
+                if (useFalloff)
+                {
+                    noiseMap[x, y] = noiseMap[x, y] - falloffMap[x, y];
+                }
                 float currentHeight = noiseMap[x, y];
                 for(int i = 0; i < regions.Length; i++)
                 {
@@ -169,6 +181,8 @@ public class MapGenerator : MonoBehaviour {
         {
             octaves = 0;
         }
+
+        falloffMap = FallOffGenerator.GenerateFalloffMap(mapChunkSize);
 
     }
 

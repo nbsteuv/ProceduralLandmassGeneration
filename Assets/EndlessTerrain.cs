@@ -8,6 +8,7 @@ public class EndlessTerrain : MonoBehaviour {
     public Transform viewer;
     public Material mapMaterial;
 
+    public LODInfo[] detailLevels;
     public static Vector2 viewerPosition;
     static MapGenerator mapGenerator;
     int chunkSize;
@@ -109,7 +110,7 @@ public class EndlessTerrain : MonoBehaviour {
         }
 
         public void SetVisible(bool visible)
-        {
+        {   
             meshObject.SetActive(visible);
         }
 
@@ -117,5 +118,37 @@ public class EndlessTerrain : MonoBehaviour {
         {
             return meshObject.activeSelf;
         }
+    }
+
+    class LODMesh
+    {
+        public Mesh mesh;
+        public bool hasRequestedMesh;
+        public bool hasMesh;
+        int lod;
+
+        public LODMesh(int lod)
+        {
+            this.lod = lod;
+        }
+
+        void OnMeshDataReceived(MeshData meshData)
+        {
+            mesh = meshData.CreateMesh();
+            hasMesh = true;
+        }
+
+        public void RequestMesh(MapData mapData)
+        {
+            hasRequestedMesh = true;
+            mapGenerator.RequestMeshData(mapData, lod, OnMeshDataReceived);
+        }
+    }
+
+    [System.Serializable]
+    public struct LODInfo
+    {
+        public int lod;
+        public float visibleDistanceThreshold;
     }
 }

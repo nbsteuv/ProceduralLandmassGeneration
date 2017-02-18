@@ -16,7 +16,8 @@ public class MapGenerator : MonoBehaviour {
     {
         NoiseMap,
         ColorMap,
-        Mesh
+        Mesh,
+        Falloff
     }
 
     public DrawMode drawMode;
@@ -82,6 +83,10 @@ public class MapGenerator : MonoBehaviour {
         else if (drawMode == DrawMode.Mesh)
         {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorPreviewLOD), TextureGenerator.TextureFromColorMap(mapData.colorMap, mapChunkSize, mapChunkSize));
+        }
+        else if (drawMode == DrawMode.Falloff)
+        {
+            display.DrawTexture(TextureGenerator.TextureFromHeightMap(FallOffGenerator.GenerateFalloffMap(mapChunkSize)));
         }
     }
 

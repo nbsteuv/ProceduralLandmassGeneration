@@ -112,7 +112,7 @@ public class MapGenerator : MonoBehaviour {
         new Thread(threadStart).Start();
     }
 
-    void MeshDataThread(MapData mapData, int lod Action<MeshData> callback)
+    void MeshDataThread(MapData mapData, int lod, Action<MeshData> callback)
     {
         MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve,
             lod);

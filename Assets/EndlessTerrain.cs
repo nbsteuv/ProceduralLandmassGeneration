@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class EndlessTerrain : MonoBehaviour {
 
+    const float viewerMoveThresholdForChunkUpdate = 25f;
+
+    private const float sqrViewerMoveThresholdForChunkUpdate =
+        viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
+
     public static float maxViewDistance;
     public Transform viewer;
     public Material mapMaterial;
 
     public LODInfo[] detailLevels;
     public static Vector2 viewerPosition;
+    Vector2 viewerPositionOld;
     static MapGenerator mapGenerator;
     int chunkSize;
     int chunksVisibleInViewDistance;
@@ -23,12 +29,18 @@ public class EndlessTerrain : MonoBehaviour {
         maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
         chunkSize = MapGenerator.mapChunkSize - 1;
         chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / chunkSize);
+        UpdateVisibleChunks();
     }
 
     void Update()
     {
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
-        UpdateVisibleChunks();
+
+        if ((viewerPositionOld - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+        {
+            UpdateVisibleChunks();
+            viewerPositionOld = viewerPosition;
+        }
     }
 
     void UpdateVisibleChunks()
@@ -101,7 +113,7 @@ public class EndlessTerrain : MonoBehaviour {
             lodMeshes = new LODMesh[detailLevels.Length];
             for (int i = 0; i < detailLevels.Length; i++)
             {
-                lodMeshes[i] = new LODMesh(detailLevels[i].lod);
+                lodMeshes[i] = new LODMesh(detailLevels[i].lod, UpdateTerrainChunk);
             }
 
             mapGenerator.RequestMapData(OnMapDataReceived);
@@ -111,6 +123,7 @@ public class EndlessTerrain : MonoBehaviour {
         {
             this.mapData = mapData;
             mapDataReceived = true;
+            UpdateTerrainChunk();
         }
 
         void OnMeshDataReceived(MeshData meshData)
@@ -176,16 +189,19 @@ public class EndlessTerrain : MonoBehaviour {
         public bool hasRequestedMesh;
         public bool hasMesh;
         int lod;
+        private System.Action updateCallback;
 
-        public LODMesh(int lod)
+        public LODMesh(int lod, System.Action updateCallback)
         {
             this.lod = lod;
+            this.updateCallback = updateCallback;
         }
 
         void OnMeshDataReceived(MeshData meshData)
         {
             mesh = meshData.CreateMesh();
             hasMesh = true;
+            updateCallback();
         }
 
         public void RequestMesh(MapData mapData)
